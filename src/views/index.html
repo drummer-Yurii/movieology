@@ -11,9 +11,12 @@
 <body>
     <div id="app">
         <video :src="videoUrl" controls autoplay></video>
+        <hr />
+        <input v-model="searchTerm" placeholder="Поиск фильма" type="search" />
+        <button @click="findMovie">Найти</button>
         <ul>
             <li v-for="file in files" :key="file.magnet">
-                {{file.fileName}}
+                {{file.title}}
                 <button @click="play(file)">Play</button>
             </li>
         </ul>
@@ -25,27 +28,33 @@
     createApp({
         data() {
             return {
+                searchTerm: '',
                 activeVideo: {},
-                files: [
-                    {
-                        magnet: 'b6611202f65f3f00b2fc9507837ef6e0e887e089',
-                        fileName: 'She.Hulk.Attorney.at.Law.S01E01.WEB-DLRip-AVC.TR.mkv'
-                    },
-                    {
-                        magnet: '',
-                        fileName: ''
-                    }
-                ],
-                message: 'Hello Vue!'
+                files: [],
             }
+        },
+        async mounted() {
+            this.getMyMovies()
         },
         computed: {
             videoUrl: ({ activeVideo }) => activeVideo.fileName ? `/stream/${activeVideo.magnet}/${activeVideo.fileName}` : ''
         },
         methods: {
             async play(file) {
-                const response = await axios.get(`/stream/add/${file.magnet}`)
-                this.activeVideo = file
+                const {data} = await axios.get(`/stream/add/${file.magnet}`)
+                console.log(data)
+                this.activeVideo = {
+                    magnet: file.magnet,
+                    fileName: data[0].name
+                }
+            },
+            async findMovie() {
+                const response = await axios.get(`/movies/search?searchTerm=${this.searchTerm}`)
+                this.files = response.data
+            },
+            async getMyMovies() {
+                const response = await axios.get(`/movies`)
+                this.files = response.data
             }
         }
     }).mount('#app')
