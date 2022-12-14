@@ -37,7 +37,8 @@
             this.getMyMovies()
         },
         computed: {
-            videoUrl: ({ activeVideo }) => activeVideo.fileName ? `/stream/${activeVideo.magnet}/${activeVideo.fileName}` : ''
+            videoUrl: ({ activeVideo }) => 
+            activeVideo.fileName ? `/stream/${activeVideo.magnet}/${activeVideo.fileName}` : ''
         },
         methods: {
             async play(file) {

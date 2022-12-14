@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as movieService from './movies.service'
 import * as IMDBService from './imdb.service'
 import { CreateMovieRequest, SearchRequest } from "./movies.interfaces";
+import { movieCredits } from "./helper/imdb.helper";
 
 const router = Router()
 

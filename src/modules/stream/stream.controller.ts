@@ -10,7 +10,7 @@ let state = {
     ratio: 0
 }
 
-let error;
+let error
 
 client.on('error', (err: Error) => {
     console.error('err', err.message)
@@ -58,7 +58,7 @@ interface StreamRequest extends Request {
     }
 }
 
-interface ErrorWidthStatus extends Error {
+interface ErrorWithStatus extends Error {
     status: number;
 }
 router.get('/:magnet/:fileName', (req: StreamRequest, res: Response, next: NextFunction) => {
@@ -68,7 +68,7 @@ router.get('/:magnet/:fileName', (req: StreamRequest, res: Response, next: NextF
     } = req
 
     if (!range) {
-        const err = new Error('Range is not defined, please make request from HTML5 Player') as ErrorWidthStatus
+        const err = new Error('Range is not defined, please make request from HTML5 Player') as ErrorWithStatus
         err.status = 416
         return next(err)
     }
@@ -78,7 +78,7 @@ router.get('/:magnet/:fileName', (req: StreamRequest, res: Response, next: NextF
 
     for (let i = 0; i < torrentFile.files.length; i++) {
         const currentTorrentPiece = torrentFile.files[i]
-        if (currentTorrentPiece.name == fileName) {
+        if (currentTorrentPiece.name === fileName) {
             file = currentTorrentPiece
         }
     }
@@ -89,7 +89,7 @@ router.get('/:magnet/:fileName', (req: StreamRequest, res: Response, next: NextF
     const start = Number(startParsed)
     const end = endParsed ? Number(endParsed) : fileSize -1
 
-    const chunkSize = end - start +1
+    const chunkSize = end - start + 1
 
     const headers = {
         'Content-Range': `bytes ${start}-${end}/${fileSize}`,

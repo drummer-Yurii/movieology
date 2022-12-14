@@ -8,7 +8,7 @@ const entity = new Schema<Movie>({
     },
     magnet: {
         type: String,
-        default: '' 
+        default: ''
     },
     fileName: {
         type: String,
@@ -34,6 +34,10 @@ const entity = new Schema<Movie>({
         type: String,
         default: ''
     }],
+    backdrop: {
+        type: String,
+        default: ''
+    },
     poster: {
         type: String,
         default: ''
